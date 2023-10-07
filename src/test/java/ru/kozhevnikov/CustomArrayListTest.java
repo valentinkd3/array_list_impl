@@ -20,19 +20,36 @@ class CustomArrayListTest {
         student4 = new Student("Julia", 21, 'f', 3);
     }
     @Test
-    void initialListNotNull() {
+    void constructorNotNull() {
         CustomArrayList<Integer> customList = new CustomArrayList<>();
 
         assertNotNull(customList);
     }
+    @Test
+    void constructorWithNegativeCapacity(){
+        Throwable illegalException = assertThrows(IllegalArgumentException.class,
+                () -> new CustomArrayList(-1));
 
+        String actual = illegalException.getMessage();
+
+        assertEquals("Illegal capacity", actual);
+    }
     @Test
     void returnCorrectSize() {
         CustomArrayList<Integer> customList = new CustomArrayList<>();
 
         assertEquals(0, customList.size());
     }
+    @Test
+    void addElementWithIncorrectIndex(){
+        CustomArrayList<Integer> customList = new CustomArrayList<>();
+        Throwable outOfBoundsException = assertThrows(IndexOutOfBoundsException.class,
+                () -> customList.add(-1, 10));
 
+        String actual = outOfBoundsException.getMessage();
+
+        assertEquals(String.format("Index -1 out of bounds for length %d", customList.size()), actual);
+    }
     @Test
     void addElementToEmptyList() {
         CustomArrayList<Integer> customList = new CustomArrayList<>();
@@ -42,7 +59,6 @@ class CustomArrayListTest {
         assertEquals(1, customList.size());
         assertEquals(13, customList.get(customList.size() - 1));
     }
-
     @Test
     void addMultipleElementsToEmptyList() {
         CustomArrayList<Integer> customList = new CustomArrayList<>();
@@ -217,6 +233,12 @@ class CustomArrayListTest {
         actual.removeIf(e -> e.getSex() == 'm');
 
         assertEquals(expected,actual);
+    }
+    @Test
+    void removeIfWithFilterEqualsNull() {
+        CustomArrayList<Student> actual = new CustomArrayList<>();
+
+        assertThrows(NullPointerException.class, () -> actual.removeIf(null));
     }
     @Test
         void quickSort() {

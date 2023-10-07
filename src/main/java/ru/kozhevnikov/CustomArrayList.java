@@ -1,25 +1,67 @@
 package ru.kozhevnikov;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Predicate;
 
+/**
+ * Кастомная реализация класса {@code ArrayList}. Реализует такие основные
+ * операции по работе со списками, как получение, добавление, удаление элементов
+ * списка, а также их сортировку. Позволяет хранить все элементы, включая {@code null}.
+ * Клаасс {@code CustomArrayList} не является потокобезопасным.
+ *
+ * <p>У каждого экземпляра {@code CustomArrayList} есть вместимость - размер
+ * массива, позволяющего хранить элементы в списке. Вместимость не может быть меньше
+ * размера списка. По мере добавления элементов вместимость автоматически увеличивается.
+ *
+ * @param <E> тип элементов в списке
+ *
+ * @author Kozhevnikov Valentin
+ * @see    Collection
+ * @see    List
+ * @see    ArrayList
+ */
 public class CustomArrayList<E> {
+    /**
+     * Размер списка
+     */
     private int size;
+    /**
+     * Размер массива, содержащего элементы списка
+     */
     private int capacity;
+    /**
+     * Массив, содержащий элементы списка
+     */
     private E[] elementData;
+
+    /**
+     * Конструктор для создания пустого списка с вместимостью = 10
+     */
     public CustomArrayList() {
         capacity = 10;
         elementData = (E[]) new Object[capacity];
     }
 
+    /**
+     * Конструктор для создания пустого списка с указанной вместимостью.
+     *
+     * @param initCapacity начальная вместимость списка
+     * @throws IllegalArgumentException в случае передачи отрицательной
+     * вместимости
+     */
     public CustomArrayList(int initCapacity) {
+        if (initCapacity < 0)
+            throw new IllegalArgumentException("Illegal capacity");
+
         capacity = initCapacity;
         elementData = (E[]) new Object[capacity];
     }
 
+    /**
+     * Добавляет передаваемый элемент в конец списка.
+     *
+     * @param element элемент, добавляемый в список
+     */
     public void add(E element) {
         if (isNeedToIncreaseCapacity()) {
             increaseCapacity();
@@ -28,7 +70,18 @@ public class CustomArrayList<E> {
         size++;
     }
 
+    /**
+     * Добавляет передаваемый элемент в указанное место списка по индексу.
+     * Сдвигает все элементы, следующие за указанным, на одну позицию вправо.
+     *
+     * @param index индекс, по которому элемент будет добавлен в список
+     * @param element элемент, добавляемый в список
+     * @throws IndexOutOfBoundsException если индекс отрицательный или не меньше
+     * размера списка
+     */
     public void add(int index, E element) {
+        checkIndexRange(index);
+
         if (isNeedToIncreaseCapacity()) {
             increaseCapacity();
         }
@@ -36,38 +89,80 @@ public class CustomArrayList<E> {
         elementData[index] = element;
         size++;
     }
-
+    /**
+     * Возвращает элемент из списка по его индексу.
+     *
+     * @param index индекс возвращаемоего элемента
+     * @return искомый элемент списка
+     * @throws IndexOutOfBoundsException если индекс отрицательный или не меньше
+     * размера списка
+     */
     public E get(int index) {
-        if (index >= size)
-            throw new IndexOutOfBoundsException(
-                    String.format("Index %d out of bounds for length %d", index, size));
+        checkIndexRange(index);
 
-        return (E) elementData[index];
+        return elementData[index];
     }
 
-    public int indexOf(Object o) {
+    /**
+     * Возвращает индекс певрго элемента списка, соответсвующего переданному элементу,
+     * или -1 в случае его отсутствия.
+     *
+     * @param element элемент списка, индекс которого мы хотим получить
+     * @return индекс элемента списка
+     */
+    public int indexOf(E element) {
         for (int i = 0; i < size; i++) {
-            if (elementData[i].equals(o)) return i;
+            if (elementData[i].equals(element)) return i;
         }
         return -1;
     }
-
+    /**
+     * Удаляет элемент из списка по его индексу.Сдвигает все элементы,
+     * следующие за удаляемым, на одну позицию влево.
+     *
+     * @param index индекс удаляемого элемента
+     * @throws IndexOutOfBoundsException если индекс отрицательный или не меньше
+     * размера списка
+     */
     public void remove(int index) {
-        if (index >= size)
-            throw new IndexOutOfBoundsException(
-                    String.format("Index %d out of bounds for length %d", index, size));
+        checkIndexRange(index);
 
         System.arraycopy(elementData, index + 1, elementData, index, size - index);
         size--;
     }
-
-    public void remove(Object o) {
-        int index = indexOf(o);
-        if (index != -1)
-            remove(index);
+    private void checkIndexRange(int index){
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException(
+                    String.format("Index %d out of bounds for length %d", index, size));
     }
 
+    /**
+     * Удаляет перый элемент из списка, соответсвующий переданному элементу, в случае
+     * его наличия. В случае отсутствия такого элемента список не изменяется.
+     *
+     * @param element жлемент, который необходимо удалить из списка
+     * @return {@code true} если список содержит указанный элемент
+     */
+    public boolean remove(E element) {
+        int index = indexOf(element);
+        if (index != -1){
+            remove(index);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Удаляет элементы из списка, удовлетворяющие передаваемому условию. В случае
+     * отсуствия таких элементов список не изменяется.
+     *
+     * @param filter условие, в соответствии с которым элементы удаляются из списка
+     * @throws NullPointerException если передаваемое условие равно {@code null}
+     */
     public void removeIf(Predicate<? super E> filter) {
+        if (filter == null)
+            throw new NullPointerException("");
+
         int left = 0;
         for (int i = 0; i < size; i++) {
             E element = get(i);
@@ -81,18 +176,38 @@ public class CustomArrayList<E> {
         }
         size = left;
     }
+
+    /**
+     * Удаляет все элементы из списка.
+     */
     public void clear(){
         int tmpSize = size;
         for (int i = 0; i < tmpSize; i++) {
             elementData[i] = null;
             size--;
         }
-        capacity = 10;
     }
 
+    /**
+     * Возвращает размер списка.
+     *
+     * @return размер списка
+     */
     public int size() {
         return size;
     }
+
+    /**
+     * Сортирует список с помощью алгоритма быстрой сортировки в соответствии с методом
+     * {@code compare} компаратора - объекта класса, реализующего функциональный
+     * интерфейс {@code Comparator}.
+     *
+     * <p> При реализации алгоритма быстрой сортировки в качестве опорного элемента на каждом
+     * шаге выбирается случайный элемент, что уменьшает вероятность возникнования ниахудшего
+     * случая при сортировке, когда список уже отсортирован или почти отсортирован.
+     *
+     * @param comparator
+     */
     public void sort(Comparator<? super E> comparator){
         quickSort(0, size-1, comparator);
     }
@@ -134,11 +249,18 @@ public class CustomArrayList<E> {
         System.arraycopy(elementData, 0, modifiedArray, 0, size);
         elementData = modifiedArray;
     }
-
     private boolean isNeedToIncreaseCapacity() {
         return size + 1 >= capacity;
     }
 
+    /**
+     * Сравнивает передаваемый объект с этим списком на равенство.
+     * Возвращается true только в том случае, когда указанный объект является
+     * списком и содержит те же элементы в том же порядке, что и этот список.
+     *
+     * @param o объект для сравнения с этим списком
+     * @return true, если указанный объект равен этому списку, в противном случае - false
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -147,6 +269,12 @@ public class CustomArrayList<E> {
         return size == that.size && Arrays.equals(elementData, that.elementData);
     }
 
+    /**
+     * Возвращает хэш-код для этого списка. Хэш-код рассчитывается
+     * на основе размера спсика и его содержимого.
+     *
+     * @return хэш-код для этого списка
+     */
     @Override
     public int hashCode() {
         int result = Objects.hash(size);
@@ -154,6 +282,13 @@ public class CustomArrayList<E> {
         return result;
     }
 
+    /**
+     * Возвращает строковое представление этого списка. Строка содержит
+     * элементы списка в порядке их добавления, заключенные в квадратные
+     * скобки ("[]") и разделенные запятыми.
+     *
+     * @return строковое представление списка
+     */
     @Override
     public String toString() {
         if (size == 0) return "[]";
