@@ -2,4 +2,4 @@
 
 Кастомная реализация ArraList
 
-[Документация javadoc к проекту] (https://valentinkd3.github.io/array_list_impl/ru/kozhevnikov/package-summary.html)
+[Документация javadoc к проекту](https://valentinkd3.github.io/array_list_impl/)
