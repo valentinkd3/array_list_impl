@@ -1,6 +1,8 @@
 package ru.kozhevnikov;
 
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -36,6 +38,10 @@ public class CustomArrayList<E> {
     }
 
     public E get(int index) {
+        if (index >= size)
+            throw new IndexOutOfBoundsException(
+                    String.format("Index %d out of bounds for length %d", index, size));
+
         return (E) elementData[index];
     }
 
@@ -47,6 +53,10 @@ public class CustomArrayList<E> {
     }
 
     public void remove(int index) {
+        if (index >= size)
+            throw new IndexOutOfBoundsException(
+                    String.format("Index %d out of bounds for length %d", index, size));
+
         System.arraycopy(elementData, index + 1, elementData, index, size - index);
         size--;
     }
@@ -70,6 +80,14 @@ public class CustomArrayList<E> {
             elementData[i] = null;
         }
         size = left;
+    }
+    public void clear(){
+        int tmpSize = size;
+        for (int i = 0; i < tmpSize; i++) {
+            elementData[i] = null;
+            size--;
+        }
+        capacity = 10;
     }
 
     public int size() {
@@ -121,7 +139,20 @@ public class CustomArrayList<E> {
         return size + 1 >= capacity;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CustomArrayList<?> that = (CustomArrayList<?>) o;
+        return size == that.size && Arrays.equals(elementData, that.elementData);
+    }
 
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(size);
+        result = 31 * result + Arrays.hashCode(elementData);
+        return result;
+    }
 
     @Override
     public String toString() {
