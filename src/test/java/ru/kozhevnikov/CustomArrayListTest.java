@@ -20,21 +20,25 @@ class CustomArrayListTest {
         student4 = new Student("Julia", 21, 'f', 3);
     }
     @Test
-    void initialList_NOT_NULL() {
+    void initialListNotNull() {
         CustomArrayList<Integer> customList = new CustomArrayList<>();
+
         assertNotNull(customList);
     }
 
     @Test
     void returnCorrectSize() {
         CustomArrayList<Integer> customList = new CustomArrayList<>();
+
         assertEquals(0, customList.size());
     }
 
     @Test
     void addElementToEmptyList() {
         CustomArrayList<Integer> customList = new CustomArrayList<>();
+
         customList.add(13);
+
         assertEquals(1, customList.size());
         assertEquals(13, customList.get(customList.size() - 1));
     }
@@ -42,9 +46,11 @@ class CustomArrayListTest {
     @Test
     void addMultipleElementsToEmptyList() {
         CustomArrayList<Integer> customList = new CustomArrayList<>();
+
         for (int i = 0; i < 5; i++) {
             customList.add(i);
         }
+
         assertEquals(5, customList.size());
         assertEquals(0, customList.get(0));
         assertEquals(1, customList.get(1));
@@ -69,10 +75,11 @@ class CustomArrayListTest {
         for (int i = 0; i < 10; i++) {
             customList.add(i);
         }
-        assertEquals(10,customList.size());
+
         customList.add(10);
         customList.add(11);
         customList.add(12);
+
         assertEquals(13, customList.size());
         assertEquals(10, customList.get(10));
         assertEquals(11, customList.get(11));
@@ -81,29 +88,31 @@ class CustomArrayListTest {
     @Test
     void checkAddNull(){
         CustomArrayList<Integer> customList = new CustomArrayList<>();
+
         customList.add(null);
+
         assertEquals(null,customList.get(0));
     }
     @Test
     void getElementOutOfBounds(){
         CustomArrayList<Integer> customList = new CustomArrayList<>();
         int indexOutOfBounds = 0;
-
         Throwable outOfBoundsException = assertThrows(IndexOutOfBoundsException.class,
                 () -> customList.get(indexOutOfBounds));
 
-        assertEquals(String.format("Index %d out of bounds for length %d", indexOutOfBounds, customList.size()),
-                outOfBoundsException.getMessage());
+        String actual = outOfBoundsException.getMessage();
+
+        assertEquals(String.format("Index %d out of bounds for length %d", indexOutOfBounds, customList.size()), actual);
     }
     @Test
     void removeElementFromEmptyList(){
         CustomArrayList<String> customList = new CustomArrayList<>();
-
         Throwable outOfBoundsException = assertThrows(IndexOutOfBoundsException.class,
                 () -> customList.remove(1));
 
-        assertEquals(String.format("Index 1 out of bounds for length %d", customList.size()),
-                outOfBoundsException.getMessage());
+        String actual = outOfBoundsException.getMessage();
+
+        assertEquals(String.format("Index 1 out of bounds for length %d", customList.size()), actual);
     }
     @Test
     void getIndexByElement() {
@@ -113,7 +122,9 @@ class CustomArrayListTest {
         students.add(student3);
         students.add(student4);
 
-        assertEquals(2, students.indexOf(student3));
+        int actual = students.indexOf(student3);
+
+        assertEquals(2, actual);
 
     }
     @Test
@@ -122,7 +133,9 @@ class CustomArrayListTest {
         for (int i = 0; i < 10; i++) {
             customList.add(i);
         }
+
         customList.clear();
+
         assertEquals(0,customList.size());
     }
     @Test
@@ -132,7 +145,6 @@ class CustomArrayListTest {
         actual.add(student2);
         actual.add(student3);
         actual.add(student4);
-
         CustomArrayList<Student> expected = new CustomArrayList<>();
         expected.add(student2);
         expected.add(student3);
@@ -149,7 +161,6 @@ class CustomArrayListTest {
         actual.add(student2);
         actual.add(student3);
         actual.add(student4);
-
         CustomArrayList<Student> expected = new CustomArrayList<>();
         expected.add(student1);
         expected.add(student2);
@@ -166,7 +177,6 @@ class CustomArrayListTest {
         actual.add(student2);
         actual.add(student3);
         actual.add(student4);
-
         CustomArrayList<Student> expected = new CustomArrayList<>();
         expected.add(student1);
         expected.add(student2);
@@ -184,7 +194,6 @@ class CustomArrayListTest {
         actual.add(student2);
         actual.add(student3);
         actual.add(student4);
-
         CustomArrayList<Student> expected = new CustomArrayList<>();
         expected.add(student1);
         expected.add(student2);
@@ -201,7 +210,6 @@ class CustomArrayListTest {
         actual.add(student2);
         actual.add(student3);
         actual.add(student4);
-
         CustomArrayList<Student> expected = new CustomArrayList<>();
         expected.add(student2);
         expected.add(student4);
@@ -217,7 +225,6 @@ class CustomArrayListTest {
         actual.add(student2);
         actual.add(student3);
         actual.add(student4);
-
         CustomArrayList<Student> expected = new CustomArrayList<>();
         expected.add(student1);
         expected.add(student3);
