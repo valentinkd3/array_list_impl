@@ -250,6 +250,7 @@ class CustomArrayListTest {
 
         actual.removeIf(e -> e.getSex() == 'm');
 
+        assertEquals(2,actual.size());
         assertEquals(expected, actual);
     }
 
