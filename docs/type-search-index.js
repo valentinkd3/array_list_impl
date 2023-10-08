@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"ru.kozhevnikov","l":"CustomArrayList"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"ru.kozhevnikov","l":"CustomArrayList"},{"p":"ru.kozhevnikov","l":"CustomList"},{"p":"ru.kozhevnikov","l":"Utils"}];updateSearchResults();
