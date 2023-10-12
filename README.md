@@ -1,5 +1,5 @@
-# array_list_impl
+# array-list-impl
 
 Кастомная реализация класса java.util.ArrayList
 
-[Документация javadoc к проекту](https://valentinkd3.github.io/array_list_impl/)
+[Документация javadoc к проекту](https://valentinkd3.github.io/trainee-array-list-impl/)
